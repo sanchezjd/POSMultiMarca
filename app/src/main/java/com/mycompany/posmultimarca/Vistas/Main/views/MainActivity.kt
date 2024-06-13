@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.mycompany.posmultimarca.Vistas.Main.viewModels.MainViewModel
 import com.mycompany.posmultimarca.ui.theme.POSMultiMarcaTheme
@@ -20,31 +21,30 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         var context = this
         mainViewModel.inicializarViewModel(context , context)
-
         setContent {
-
             POSMultiMarcaTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
+                    MainView(mainViewModel)
                 }
             }
         }
     }
 }
 
+
+@Preview()
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MainView_Preview() {
+    POSMultiMarcaTheme {
+        Text("Serial:")
+    }
 }
 
-@Preview(showBackground = true)
+
 @Composable
-fun GreetingPreview() {
+fun MainView(mainViewModel: MainViewModel) {
     POSMultiMarcaTheme {
-        Greeting("Android")
+        Text("Serial: ${mainViewModel.serial}")
     }
 }

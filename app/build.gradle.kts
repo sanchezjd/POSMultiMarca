@@ -44,6 +44,11 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    sourceSets.getByName("main") {
+        jniLibs.srcDir("libs")
+    }
+
 }
 
 dependencies {
@@ -66,4 +71,6 @@ dependencies {
 
     implementation ("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.security:security-crypto:1.0.0")
+
+    implementation(files("libs/meSdk-3.7.114-RELEASE.jar"))
 }
