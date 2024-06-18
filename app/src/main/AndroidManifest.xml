@@ -2,6 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.MANAGE_NEWLAND_CARDREADER" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_MAGCARD" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_RFID" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_ICCARD" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_PIN" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_EMV" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_CASHBOX" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_EXTERNAL_PINAD" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_EXTERNAL_RF" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_EXTERNAL_SCAN" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_EXTERNAL_SIGNATURE" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_LIGHT" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_SCAN" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_SECURITY" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_SERIAL" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_STORAGE" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_SM" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_GUEST_DISPLAY" />
+   <uses-permission android:name="android.permission.MANAGE_NEWLAND_PRINTER"/> >
+
     <application
             android:allowBackup="true"
             android:dataExtractionRules="@xml/data_extraction_rules"

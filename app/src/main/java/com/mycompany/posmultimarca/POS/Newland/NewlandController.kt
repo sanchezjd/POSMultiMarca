@@ -1,12 +1,14 @@
 package com.mycompany.posmultimarca.POS.Newland
 
 import android.content.Context
+import android.os.Build
 import android.os.Handler
 import com.mycompany.posmultimarca.POS.POSController
 import com.mycompany.posmultimarca.POS.POSMessenger
 import com.newland.me.ConnUtils
 import com.newland.me.DeviceManager
 import com.newland.mtype.ConnectionCloseEvent
+import com.newland.mtype.ExModuleType
 import com.newland.mtype.conn.DeviceConnParams
 import com.newland.mtype.event.DeviceEventListener
 import com.newland.mtypex.nseries3.NS3ConnParams
@@ -41,16 +43,19 @@ class NewlandController(var posMessenger: POSMessenger) : POSController {
                     }
                 })
             deviceManager.connect()
+
+            //val emvModule = deviceManager.device.getExModule(ExModuleType.EMVINNERLEVEL2)
             posMessenger.onInitPOSOK()
         }
         catch (e: Exception) {
             posMessenger.onInitPOSFail()
         }
-
     }
 
     override fun getSerial(): String {
-        return deviceManager.device.deviceInfo.sn
+        var SerialNumber = deviceManager.device.deviceInfo.sn
+
+        return SerialNumber
     }
 
 }
