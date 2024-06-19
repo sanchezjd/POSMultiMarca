@@ -42,6 +42,8 @@ class MainViewModel: BaseViewModel(),POSMessenger {
     override fun onInitPOSOK() {
         appIniciada()
         serial =  global.posController.getSerial()
+        if(appPrimeraVez)
+            global.posController.firstExecute()
     }
 
     override fun onInitPOSFail() {

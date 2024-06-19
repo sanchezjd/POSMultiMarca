@@ -12,11 +12,15 @@ class DummyController(var posMessenger: POSMessenger) : POSController {
         return "DUMMYSERIAL"
     }
 
-    override fun setMKDevelopmentMode(mkey: String, indice: Int, chk: String): Boolean {
+    override fun setMKDevelopmentMode(mkey: String, indice: Int, chk: String?): Boolean {
         TODO("Not yet implemented")
     }
 
     override fun setEWK(ewkey: String, indiceMK: Int, indice: Int, chk: String): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun firstExecute() {
         TODO("Not yet implemented")
     }
 }
