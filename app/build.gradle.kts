@@ -25,7 +25,11 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        debug {
+            isDebuggable = true
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -35,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig  = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
