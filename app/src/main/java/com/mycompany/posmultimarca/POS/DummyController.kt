@@ -23,4 +23,19 @@ class DummyController(var posMessenger: POSMessenger) : POSController {
     override fun firstExecute() {
         TODO("Not yet implemented")
     }
+
+    override fun initTransaction(
+        amount: Long,
+        typeTrans: TYPE_TRANSACTION,
+        swipeAllow: Boolean,
+        iccAllow: Boolean,
+        rfcAllow: Boolean,
+        timeOut: Long
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun cancelWaitCard() {
+        TODO("Not yet implemented")
+    }
 }

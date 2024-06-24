@@ -10,6 +10,8 @@ import com.mycompany.posmultimarca.BaseViewModel
 import com.mycompany.posmultimarca.POS.DummyController
 import com.mycompany.posmultimarca.POS.Newland.NewlandController
 import com.mycompany.posmultimarca.POS.POSMessenger
+import com.mycompany.posmultimarca.POS.TYPE_CARD
+import com.mycompany.posmultimarca.POS.TYPE_TRANSACTION
 import com.mycompany.posmultimarca.Persistencia.DataSharedPreferences
 
 class MainViewModel: BaseViewModel(),POSMessenger {
@@ -48,5 +50,24 @@ class MainViewModel: BaseViewModel(),POSMessenger {
 
     override fun onInitPOSFail() {
         mensaje = "Fallo POS Init"
+    }
+
+    override fun onCardDetect(typeCard: TYPE_CARD) {
+        if(typeCard == TYPE_CARD.ICC)
+            mensaje = "TARJETA CONTACTO"
+        else  if(typeCard == TYPE_CARD.RFC)
+            mensaje = "TARJETA SIN CONTACTO"
+    }
+
+
+    fun initSale() {
+        mensaje = "ESPERANDO TARJETA"
+        global.posController.initTransaction(
+            1000,
+            TYPE_TRANSACTION.VENTA,
+            swipeAllow =  false,
+            iccAllow =  true,
+            rfcAllow =  true,
+            timeOut = 10)
     }
 }

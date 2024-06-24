@@ -3,24 +3,28 @@ package com.mycompany.posmultimarca.POS.Newland
 import android.content.Context
 import android.os.Handler
 import android.util.Log
-import com.mycompany.posmultimarca.POS.POSController
-import com.mycompany.posmultimarca.POS.POSMessenger
+import com.mycompany.posmultimarca.BuildConfig
+import com.mycompany.posmultimarca.POS.*
 import com.newland.me.ConnUtils
 import com.newland.me.DeviceManager
 import com.newland.mtype.ConnectionCloseEvent
+import com.newland.mtype.ExModuleType
 import com.newland.mtype.ModuleType
 import com.newland.mtype.conn.DeviceConnParams
 import com.newland.mtype.event.DeviceEventListener
+import com.newland.mtype.module.common.cardreader.CommonCardType
+import com.newland.mtype.module.common.cardreader.K21CardReader
+import com.newland.mtype.module.common.cardreader.K21CardReaderEvent
+import com.newland.mtype.module.common.cardreader.SearchCardRule
+import com.newland.mtype.module.common.emv.EmvModule
+import com.newland.mtype.module.common.pin.*
 import com.newland.mtype.module.common.printer.Printer
 import com.newland.mtype.module.common.security.K21SecurityModule
 import com.newland.mtype.util.ISOUtils
 import com.newland.mtypex.nseries3.NS3ConnParams
-import com.mycompany.posmultimarca.BuildConfig
-import com.newland.mtype.common.PermissionCode.NEWLAND
-import com.newland.mtype.module.common.pin.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 
 class NewlandController(var posMessenger: POSMessenger) : POSController {
@@ -32,6 +36,12 @@ class NewlandController(var posMessenger: POSMessenger) : POSController {
     private  lateinit var securityModule: K21SecurityModule
     private  lateinit var printerModule: Printer
     private  lateinit var pininputModule: K21Pininput
+    private lateinit var emvModule: EmvModule
+
+
+    private lateinit var cardReader: K21CardReader
+
+
 
     private val TAG = "NewlandController"
 
@@ -58,11 +68,18 @@ class NewlandController(var posMessenger: POSMessenger) : POSController {
                         }
                     })
                 deviceManager.connect()
-                //val emvModule = deviceManager.device.getExModule(ExModuleType.EMVINNERLEVEL2)
-                Thread.sleep(1000)
                 securityModule = deviceManager.device.getStandardModule(ModuleType.COMMON_SECURITY) as K21SecurityModule
                 printerModule = deviceManager.device.getStandardModule(ModuleType.COMMON_PRINTER) as Printer
                 pininputModule = deviceManager.device.getStandardModule(ModuleType.COMMON_PININPUT) as K21Pininput
+
+                emvModule = deviceManager.device.getExModule(ExModuleType.EMVINNERLEVEL2) as EmvModule
+                emvModule.initEmvModule(context)
+
+                cardReader = deviceManager.device.getStandardModule(ModuleType.COMMON_CARDREADER) as K21CardReader
+
+                loadCAPK()
+                loadAIDContact() //VA A CAMBIAR PARA CUANDO SE DETECTE EL TIPO TARJETA
+
                 posMessenger.onInitPOSOK()
 
             } catch (e: Exception) {
@@ -114,6 +131,71 @@ class NewlandController(var posMessenger: POSMessenger) : POSController {
         }
     }
 
+    override fun initTransaction(
+        amount: Long,
+        typeTrans: TYPE_TRANSACTION,
+        swipeAllow: Boolean,
+        iccAllow: Boolean,
+        rfcAllow: Boolean,
+        timeOut: Long
+    ) {
+
+        var readerList = arrayListOf<ModuleType>()
+
+        if(swipeAllow) readerList.add(ModuleType.COMMON_SWIPER)
+        if(iccAllow) readerList.add(ModuleType.COMMON_ICCARDREADER)
+        if(rfcAllow) readerList.add(ModuleType.COMMON_RFCARDREADER)
+
+
+        cardReader.openCardReader(readerList.toTypedArray(), false, timeOut, TimeUnit.SECONDS,
+
+            object : DeviceEventListener<K21CardReaderEvent> {
+                override fun onEvent(p0: K21CardReaderEvent?, handler: Handler?) {
+                    Log.i(TAG, p0.toString())
+
+                    if(p0!!.isSuccess) {
+                      if(p0.openCardReaderResult.responseCardTypes[0] == CommonCardType.ICCARD) {
+                          posMessenger.onCardDetect(TYPE_CARD.ICC)
+                      }
+                      else  if(p0.openCardReaderResult.responseCardTypes[0] == CommonCardType.RFCARD) {
+                          posMessenger.onCardDetect(TYPE_CARD.RFC)
+                      }
+                    }
+                }
+                override fun getUIHandler(): Handler? {
+                    return null
+                }
+            }
+            , SearchCardRule.RFCARD_FIRST)
+
+    }
+
+    override fun cancelWaitCard() {
+        cardReader.cancelCardRead()
+    }
+
+    private fun loadAIDContact() {
+        emvModule.clearAllAID()
+        var i=0
+        for(aidStr in Constantes.LIST_AID_CONTACT) {
+            var result = emvModule.addAIDWithDataSource(ISOUtils.hex2byte(aidStr))
+
+
+            Log.i(TAG,"AID CONTACT $i: $result")
+            i++
+        }
+    }
+
+    private fun loadCAPK() {
+        emvModule.clearAllCAPublicKey()
+        var i=0
+        for(capkStr in Constantes.LIST_CAPK) {
+           var result = emvModule.addCAPublicKeyWithDataSource(ISOUtils.hex2byte(capkStr))
+
+            Log.i(TAG,"CAPK $i: $result")
+            i++
+        }
+    }
 
     fun testPINKEYS(ewkey: String, indiceMK: Int,indice: Int, chk:String):Boolean  {
         try {
