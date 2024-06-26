@@ -20,6 +20,8 @@ class MainViewModel: BaseViewModel(),POSMessenger {
     var mensaje by mutableStateOf("")
     var serial by mutableStateOf("")
 
+    var showMenuAppsID  by mutableStateOf(false)
+
     fun appIniciada() {
         DataSharedPreferences(context).updateField(DataSharedPreferences.FIELD_INIT_COMPLETE,"1")
     }
@@ -57,6 +59,19 @@ class MainViewModel: BaseViewModel(),POSMessenger {
             mensaje = "TARJETA CONTACTO"
         else  if(typeCard == TYPE_CARD.RFC)
             mensaje = "TARJETA SIN CONTACTO"
+    }
+
+    var listadoApp = ArrayList<Pair<Int,String>>()
+    var onAPPSelectView:(Int) -> Unit?  by mutableStateOf( {  })
+
+    override fun selectAPP(listAPP: ArrayList<String>, onAPPSelect: (Int) -> Unit) {
+        var i = 0
+        for(aidApp in listAPP) {
+            listadoApp.add(Pair(i,aidApp))
+            i = i + 1
+        }
+        onAPPSelectView = onAPPSelect
+        showMenuAppsID = true
     }
 
 

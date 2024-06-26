@@ -6,4 +6,6 @@ interface POSMessenger {
 
     fun onCardDetect(typeCard: TYPE_CARD)
 
+    fun selectAPP(listAPP:ArrayList<String>, onAPPSelect:(Int) -> Unit)
+
 }
