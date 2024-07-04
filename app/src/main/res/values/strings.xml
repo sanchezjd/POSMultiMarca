@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">POSMultiMarca</string>
+    <string name="keyboard_cancel">Cancelar</string>
+    <string name="keyboard_confirm">Confirmar</string>
+
+    <string name="keyboard_activity_log_init_coordinates">init coordinates:</string>
+    <string name="keyboard_activity_log_press_key_code">press key code:</string>
+    <string name="keyboard_activity_log_press_cancel_code">press cancel code:</string>
+    <string name="keyboard_activity_log_input_empty">empty input.</string>
+    <string name="keyboard_activity_log_input_success">input successfully.</string>
+    <string name="keyboard_activity_log_input_exception">input exception.</string>
+    <string name="keyboard_activity_log_screen_height">screen height:</string>
+    <string name="keyboard_activity_log_application_top">the application top:</string>
+    <string name="keyboard_activity_log_application_height">the application height:</string>
+    <string name="keyboard_activity_log_view_draw_area_top_error_method">View draw area-error method:</string>
+    <string name="keyboard_activity_log_view_draw_area_top_right_method">View draw area-right method:</string>
+    <string name="keyboard_activity_log_view_draw_area_top">View draw area height:</string>
 </resources>

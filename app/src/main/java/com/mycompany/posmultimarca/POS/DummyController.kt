@@ -30,7 +30,10 @@ class DummyController(var posMessenger: POSMessenger) : POSController {
         swipeAllow: Boolean,
         iccAllow: Boolean,
         rfcAllow: Boolean,
-        timeOut: Long
+        timeOut: Long,
+        stan: Long,
+        CurrencyCode: String,
+        TerminalCountryCode:String
     ) {
         TODO("Not yet implemented")
     }

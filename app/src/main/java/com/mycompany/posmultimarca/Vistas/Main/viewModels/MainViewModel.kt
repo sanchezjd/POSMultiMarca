@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.mycompany.posmultimarca.BaseViewModel
+import com.mycompany.posmultimarca.Constantes
 import com.mycompany.posmultimarca.POS.DummyController
 import com.mycompany.posmultimarca.POS.Newland.NewlandController
 import com.mycompany.posmultimarca.POS.POSMessenger
@@ -21,6 +22,12 @@ class MainViewModel: BaseViewModel(),POSMessenger {
     var serial by mutableStateOf("")
 
     var showMenuAppsID  by mutableStateOf(false)
+    var showCardInfo  by mutableStateOf(false)
+    var showPinPad  by mutableStateOf(false)
+
+    var numCard by  mutableStateOf("")
+    var aidCard by  mutableStateOf("")
+    var labelCard by  mutableStateOf("")
 
     fun appIniciada() {
         DataSharedPreferences(context).updateField(DataSharedPreferences.FIELD_INIT_COMPLETE,"1")
@@ -62,7 +69,7 @@ class MainViewModel: BaseViewModel(),POSMessenger {
     }
 
     var listadoApp = ArrayList<Pair<Int,String>>()
-    var onAPPSelectView:(Int) -> Unit?  by mutableStateOf( {  })
+    var onAPPSelectPublic:(Int) -> Unit?  by mutableStateOf( {  })
 
     override fun selectAPP(listAPP: ArrayList<String>, onAPPSelect: (Int) -> Unit) {
         var i = 0
@@ -70,8 +77,33 @@ class MainViewModel: BaseViewModel(),POSMessenger {
             listadoApp.add(Pair(i,aidApp))
             i = i + 1
         }
-        onAPPSelectView = onAPPSelect
+        onAPPSelectPublic = onAPPSelect
         showMenuAppsID = true
+    }
+
+    var onViewInteractionPublic:(String) -> Unit?  by mutableStateOf( {  })
+    override fun onCardInfoRead(cardMap: HashMap<String, String>, onViewInteraction: (String) -> Unit) {
+        onViewInteractionPublic = onViewInteraction
+        aidCard = cardMap.get(Constantes.FIELD_AID).toString()
+        numCard = cardMap.get(Constantes.FIELD_PAN).toString()
+        labelCard = cardMap.get(Constantes.FIELD_APPLABEL).toString()
+        showCardInfo = true
+    }
+
+    override fun onError(mensaje: String) {
+        this.mensaje = mensaje
+    }
+
+    override fun onSpecialCase(mensaje: String) {
+
+    }
+
+    var onPinOkView:(String) -> Unit?  by mutableStateOf( {  })
+    var onPinNOkView:(Int) -> Unit?  by mutableStateOf( {  })
+    override fun showPinPad(pinType: Int, onPinOk: (String) -> Unit, onPinNOk: (Int) -> Unit) {
+        onPinOkView = onPinOk
+        onPinNOkView = onPinNOk
+        showPinPad = true
     }
 
 
@@ -83,6 +115,9 @@ class MainViewModel: BaseViewModel(),POSMessenger {
             swipeAllow =  false,
             iccAllow =  true,
             rfcAllow =  true,
-            timeOut = 10)
+            timeOut = 10,
+            1,
+            "0937",
+            "0862")
     }
 }

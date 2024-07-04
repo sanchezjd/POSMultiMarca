@@ -67,7 +67,7 @@ fun MainView(mainViewModel: MainViewModel) {
                                 modifier = Modifier.fillMaxWidth(),
 
                                 onClick = {
-                                    mainViewModel.onAPPSelectView(appLabel.first)
+                                    mainViewModel.onAPPSelectPublic(appLabel.first)
                                     mainViewModel.showMenuAppsID = false
                                 })
                             {
@@ -76,13 +76,40 @@ fun MainView(mainViewModel: MainViewModel) {
                         }
 
                         Button( onClick = {
-                            mainViewModel.onAPPSelectView(-1)
+                            mainViewModel.onAPPSelectPublic(-1)
                             mainViewModel.showMenuAppsID = false
 
                         }) {
                             Text(text = "Cancelar")
                         }
 
+                    }
+                }
+            }
+        }
+
+        if(mainViewModel.showCardInfo) {
+            Dialog(onDismissRequest = { /*TODO*/ }) {
+                Surface(shape = MaterialTheme.shapes.medium) {
+                    Column(
+                        Modifier
+                            .padding(4.dp)
+                            .size(width = 300.dp, height = 250.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("Tarjeta Leida", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Spacer(modifier = Modifier.size(20.dp))
+                        Text("Numero: ${mainViewModel.numCard}")
+                        Text("Tipo: ${mainViewModel.labelCard}")
+                        Text("AID: ${mainViewModel.aidCard}")
+
+                        Button( onClick = {
+                            mainViewModel.onViewInteractionPublic("")
+                            mainViewModel.showCardInfo = false
+
+                        }) {
+                            Text(text = "Aceptar")
+                        }
                     }
                 }
             }

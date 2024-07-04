@@ -17,7 +17,15 @@ interface POSController {
 
 
 
-    fun initTransaction(amount:Long, typeTrans:TYPE_TRANSACTION, swipeAllow:Boolean, iccAllow:Boolean, rfcAllow:Boolean, timeOut:Long)
+    fun initTransaction(amount:Long,
+                        typeTrans:TYPE_TRANSACTION,
+                        swipeAllow:Boolean,
+                        iccAllow:Boolean,
+                        rfcAllow:Boolean,
+                        timeOut:Long,
+                        stan: Long,
+                        CurrencyCode: String,
+                        TerminalCountryCode:String)
 
     fun cancelWaitCard()
 
